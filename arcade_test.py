@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Jan 21 09:00:33 2024
-
-@author: Matthieu Dupas
-"""
-
-
 class Window:
     """Provide a mack of the Window."""
 
@@ -27,7 +19,6 @@ class SpriteList(list):
     def __init__(self):
         """Initialize."""
         pass
-
 
 
 def start_render():

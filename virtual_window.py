@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Jan 14 15:07:11 2024
-
-@author: Matthieu Dupas
-"""
-
 from maze2 import Maze
 from maze2 import MazeObserver
 

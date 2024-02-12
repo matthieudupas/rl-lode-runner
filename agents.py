@@ -1,31 +1,21 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 20 16:11:53 2024
-
-@author: Matthieu Dupas
-"""
-from random import random
-from random import choice
-
 import pickle
 from os.path import exists
+from random import random
 
-from maze2 import Maze
-from maze2 import MAP_WALL_DIGGABLE
-
-from actions import ACTIONS_CLASS
 from actions import ACTIONS
+from actions import ACTIONS_CLASS
 from actions import ACTIONS_MOVES
-from actions import ACTION_UP
 from actions import ACTION_DOWN
 from actions import ACTION_LEFT
 from actions import ACTION_RIGHT
+from actions import ACTION_UP
+from actions import AbstractAction
 from actions import X
 from actions import Y
-from actions import AbstractAction
-
-from environment import build_radar
 from environment import REWARD_SUICIDE
+from environment import build_radar
+from maze2 import MAP_WALL_DIGGABLE
+from maze2 import Maze
 
 ALEA_FACTOR = 0.95
 START_NOISE = 0.40
@@ -67,11 +57,11 @@ class AgentZombie():
         else:
             actions.append(ACTION_RIGHT)
         # Try the first move.
-        new_position, result_ok =\
+        new_position, result_ok = \
             ACTIONS_CLASS[actions[X]].execute(self.position)
         # If nothing has been done try the second move.
         if not result_ok:
-            new_position, result_2 =\
+            new_position, result_2 = \
                 ACTIONS_CLASS[actions[Y]].execute(self.position)
             if result_2:
                 self.position = new_position
@@ -120,8 +110,8 @@ class Qtable():
         try:
             self.add_state(new_state)
             maxQ = max(self.qtable[new_state].values())
-            delta = self.learning_rate *\
-                (reward + self.discount_factor * maxQ - self.qtable[state][action])
+            delta = self.learning_rate * \
+                    (reward + self.discount_factor * maxQ - self.qtable[state][action])
             self.qtable[state][action] += delta
         except KeyError:
             print('---------------------------------------------------')
@@ -132,7 +122,11 @@ class Qtable():
 
     def get_max(self, state):
         """Get the max."""
-        return arg_max(self.qtable[state])
+        try:
+            return arg_max(self.qtable[state])
+        except KeyError:
+            print('-------get max error-------------------------------------------')
+            return 0
 
 
 class Agent:
@@ -175,7 +169,7 @@ class Agent:
         proba = random()
         if proba < self.noise:
             my_action = AbstractAction().choice_action(proba)
-#            my_action = choice(ACTIONS)
+        #            my_action = choice(ACTIONS)
         else:
             my_action = self.qtable.get_max(self.state)
         return my_action

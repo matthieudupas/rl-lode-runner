@@ -1,28 +1,24 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 20 16:33:38 2024
-
-@author: Matthieu Dupas
-"""
-from arcade import Window
+import arcade
 from arcade import Sprite
 from arcade import SpriteList
+from arcade import Window
 from arcade import start_render
 
-#from arcade_test import Window
-#from arcade_test import Sprite
-#from arcade_test import SpriteList
-#from arcade_test import start_render
-
-from maze2 import Maze
+from actions import X
+from actions import Y
+from maze2 import INVALID_POSITION
 from maze2 import MAP_BRIDGE
 from maze2 import MAP_LADDER
 from maze2 import MAP_WALL
 from maze2 import MAP_WALL_DIGGABLE
 from maze2 import MAP_WALL_HOLLOW
+from maze2 import Maze
 from virtual_window import VirtualWindow
-from actions import X
-from actions import Y
+
+# from arcade_test import Window
+# from arcade_test import Sprite
+# from arcade_test import SpriteList
+# from arcade_test import start_render
 
 SPRITE_SCALING = 0.25
 SPRITE_SIZE = 32
@@ -91,54 +87,51 @@ class MazeWindow(Window, VirtualWindow):
         self.enmies = SpriteList()
         for zombie in self.zombies:
             zombie_sprite = Sprite(IMAGE_ZOMBIE, SPRITE_SCALING)
-            zombie_sprite.center_x,\
+            zombie_sprite.center_x, \
                 zombie_sprite.center_y = state_to_xy(zombie.position)
             self.enmies.append(zombie_sprite)
         self.update_enmies()
 
     def update_player(self):
         """Update the position of the player."""
-        self.player.center_x,\
+        self.player.center_x, \
             self.player.center_y = state_to_xy(self.agent.position)
 
     def update_enmies(self):
         """Update the position of the enemies."""
         for count, zombie in enumerate(self.enmies):
-            zombie.center_x,\
+            zombie.center_x, \
                 zombie.center_y = state_to_xy(self.zombies[count].position)
 
     def setup(self):
         """Set up."""
+        print('SETUP')
         self.walls_non_diggable = SpriteList()
         for position, block in Maze().get_all_positions().items():
             if block.my_char == MAP_WALL:
                 wall_sprite = Sprite(IMAGE_WALL, SPRITE_SCALING)
-                wall_sprite.center_x,\
+                wall_sprite.center_x, \
                     wall_sprite.center_y = state_to_xy(position)
                 self.walls_non_diggable.append(wall_sprite)
             elif block.my_char == MAP_LADDER:
                 ladder_sprite = Sprite(IMAGE_LADDER, SPRITE_SCALING)
-                ladder_sprite.center_x,\
+                ladder_sprite.center_x, \
                     ladder_sprite.center_y = state_to_xy(position)
                 self.walls_non_diggable.append(ladder_sprite)
             elif block.my_char == MAP_BRIDGE:
                 bridge_sprite = Sprite(IMAGE_BRIDGE, SPRITE_SCALING)
-                bridge_sprite.center_x,\
+                bridge_sprite.center_x, \
                     bridge_sprite.center_y = state_to_xy(position)
                 self.walls_non_diggable.append(bridge_sprite)
             elif block.my_char == MAP_WALL_HOLLOW:
                 wall_hallow_sprite = Sprite(IMAGE_WALL_HOLLOW, SPRITE_SCALING)
-                wall_hallow_sprite.center_x,\
+                wall_hallow_sprite.center_x, \
                     wall_hallow_sprite.center_y = state_to_xy(position)
                 self.walls_non_diggable.append(wall_hallow_sprite)
-
-            if Maze().goal is not None:
-                self.goal = Sprite(IMAGE_EXIT, SPRITE_SCALING)
-                self.goal.center_x,\
-                    self.goal.center_y = state_to_xy(Maze().goal)
+            print(Maze().goal)
 
         self.start = Sprite(IMAGE_START, SPRITE_SCALING)
-        self.start.center_x,\
+        self.start.center_x, \
             self.start.center_y = state_to_xy(Maze().start)
 
         self.player = Sprite(IMAGE_AGENT, SPRITE_SCALING)
@@ -150,7 +143,7 @@ class MazeWindow(Window, VirtualWindow):
         for dollar in Maze().dollars:
             if Maze().get(dollar).activated:
                 dollar_sprite = Sprite(IMAGE_DOLLAR, SPRITE_SCALING)
-                dollar_sprite.center_x,\
+                dollar_sprite.center_x, \
                     dollar_sprite.center_y = state_to_xy(dollar)
                 self.dollars.append(dollar_sprite)
 
@@ -159,17 +152,20 @@ class MazeWindow(Window, VirtualWindow):
         self.walls = SpriteList()
         for position in Maze().get_all_positions():
             my_element = Maze().get(position)
-            if my_element.my_char == MAP_WALL_DIGGABLE and\
-               not my_element.is_access():
+            if my_element.my_char == MAP_WALL_DIGGABLE and \
+                    not my_element.is_access():
                 wall_diggable_sprite = Sprite(IMAGE_WALL_DIGG, SPRITE_SCALING)
-                wall_diggable_sprite.center_x,\
+                wall_diggable_sprite.center_x, \
                     wall_diggable_sprite.center_y = state_to_xy(position)
                 self.walls.append(wall_diggable_sprite)
 
     def on_draw(self):
         """Redraw all."""
         start_render()
-        if Maze().goal is not None:
+        if Maze().goal != INVALID_POSITION:
+            self.goal = Sprite(IMAGE_EXIT, SPRITE_SCALING)
+            self.goal.center_x, \
+                self.goal.center_y = state_to_xy(Maze().goal)
             self.goal.draw()
         self.start.draw()
         self.walls.draw()
@@ -177,8 +173,10 @@ class MazeWindow(Window, VirtualWindow):
         self.player.draw()
         self.dollars.draw()
         self.enmies.draw()
-#        arcade.draw_text(f'#{self.agent.iteration} Score : {self.agent.score}',
-#                         10, 10, arcade.color.AUBURN, 16)
+
+        arcade.draw_text(
+            f'#{self.agent.iteration} Score : {self.agent.score} Parties : {self.games} Noise : {self.agent.noise}',
+            10, 10, arcade.color.WHITE, 16)
     # def on_key_press(self, key, modifiers):
     #     # print("key:",key)
     #     if key == arcade.key.R:

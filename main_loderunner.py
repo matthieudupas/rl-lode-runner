@@ -1,23 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Jan 14 15:07:11 2024
-
-@author: Matthieu Dupas
-"""
-#import arcade
-
 import matplotlib.pyplot as plt
 
-from maze2 import Maze
-from environment import Environment
 from agents import Agent
 from agents import AgentZombie
 from arcade_window import MazeWindow
+from environment import Environment
+from maze2 import Maze
 
-MAX_STEP = 10  # Number max of steps.
+MAX_STEP = 1  # Number max of steps.
 
 AGENT_FILE = 'agent.qtable'
-
 
 if __name__ == '__main__':
     env = Environment()
@@ -25,7 +16,7 @@ if __name__ == '__main__':
     zombies = []
     for zombie in Maze().zombies:
         zombies.append(AgentZombie(env, zombie))
-    for _ in range(MAX_STEP):
+    for party_count in range(MAX_STEP):
         agent.load(AGENT_FILE)
         # for key, value in agent.qtable.qtable.items():
         #     print("key->", key)
@@ -47,6 +38,5 @@ if __name__ == '__main__':
         agent.save(AGENT_FILE)
         Maze().reset()
         agent.reset()
-#    plt.plot(agent.history)
-#    plt.show()
-
+    plt.plot(agent.history)
+    plt.show()

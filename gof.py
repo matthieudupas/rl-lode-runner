@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Dec 27 07:59:44 2023
-
-@author: Matthieu Dupas
-"""
-
-
 class Singleton(type):
     """Define a generic Singleton."""
 
@@ -28,6 +20,7 @@ class Singleton(type):
 
 class ObjectFactory:
     """Defines a general purpose factory"""
+
     def __init__(self):
         """Initialize the factoty."""
         self._builders = {}

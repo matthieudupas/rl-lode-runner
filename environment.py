@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 20 15:38:47 2024
-
-@author: Matthieu Dupas
-"""
-from maze2 import Maze
-from maze2 import MAP_WALL
 from actions import ACTIONS_CLASS
-
+from maze2 import INVALID_POSITION
+from maze2 import MAP_WALL
+from maze2 import Maze
 
 NULL_RADAR = [0] * 9  # Radar-goal Matix 3x3 0
 NEIGHBORS = 2
@@ -30,7 +24,7 @@ def sign(value):
 def build_radar(goal, row, col):
     """Build a radar to goal."""
     radar_goal = NULL_RADAR  # Radar-goal vaut O.
-    if goal is not None:
+    if goal != INVALID_POSITION:
         delta_row = sign(goal[0] - row) + 1
         delta_col = sign(goal[1] - col) + 1
         position = delta_row * 3 + delta_col
@@ -55,13 +49,13 @@ class Environment:
                 neighbors.append((row + a_sign * a_row, col))
         for a_sign in RANGE_SIGN:
             for a_column in RANGE_NEIGHBORS:
-                neighbors.append((row,  col + a_sign * a_column))
+                neighbors.append((row, col + a_sign * a_column))
         for a_sign in RANGE_SIGN:
             for a_column in RANGE_NEIGHBORS:
-                neighbors.append((row-1, col + a_sign * a_column))
+                neighbors.append((row - 1, col + a_sign * a_column))
         for a_sign in RANGE_SIGN:
             for a_column in RANGE_NEIGHBORS:
-                neighbors.append((row+1, col + a_sign * a_column))
+                neighbors.append((row + 1, col + a_sign * a_column))
 
         radar = []
         for a_neighbor in neighbors:

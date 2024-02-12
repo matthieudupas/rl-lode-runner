@@ -1,11 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 15 14:36:32 2024
-
-@author: Matthieu Dupas
-"""
 from gof import Singleton
-
 
 MAZE1 = [
     "   $                        *",
@@ -27,28 +20,23 @@ MAZE1 = [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"]
 
 MAZE = [
-    "   $                        *",
-    "|##@##|           $         |",
-    "|     |    |@@@@@@@@@| $    |",
+    "                            *",
+    "|##@##|                     |",
+    "|     |    |@@@@@@@@@|      |",
     "|     |    |         |@@@@@@|",
-    "| $   |    |         |       ",
+    "|     |    |         |       ",
     "|@@@@@|    |         |       ",
     "|     |----|------   |       ",
     "|     |    |     |@@@######&|",
-    "|     |    |  $  |          |",
+    "|     |    |     |          |",
     "|     |    |@@@@@|          |",
     "#@@@#@@#@@#|          |@@@|@@",
     "#@@@#      |          |   |  ",
     "#   #      |   -------|   |  ",
     "@@@@@@@@|@@@####      |  @@@@",
     "        |             |      ",
-    "    $   |      .      |      ",
+    "*   $   |      .      |      ",
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"]
-
-REWARD_WALL = -128
-REWARD_DEFAULT = -1
-REWARD_GOAL = 64
-
 
 # Defines all the characters used in Maze.
 MAP_WALL = '#'
@@ -271,7 +259,7 @@ class Maze(Subject, metaclass=Singleton):
 
     def build_maze(self):
         """Build the maze."""
-        self.goal = None
+        self.goal = INVALID_POSITION
         self.number_of_dollars = 0
         row = 0
         for line in MAZE:
