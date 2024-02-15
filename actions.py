@@ -35,6 +35,7 @@ class AbstractAction(metaclass=Singleton):
     def __init__(self):
         """Initialize."""
         self.move = MOVES[ACTION_LEFT]
+        self.proba = 0
 
     def execute(self, position):
         """Execute the action."""
@@ -57,11 +58,15 @@ class AbstractAction(metaclass=Singleton):
     def choice_action(self, proba):
         """Choice of the next actions."""
         result = None
-        if proba < DIGG_THRESHOLD:
+        if proba < self.proba:
             result = choice(ACTIONS_DIGG)
         else:
             result = choice(ACTIONS_MOVES)
         return result
+
+    def update_proba(self, new_proba):
+        """Change the proba."""
+        self.proba = new_proba
 
 
 class LeftAction(AbstractAction):

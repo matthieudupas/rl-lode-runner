@@ -1,7 +1,7 @@
 from maze2 import Maze
 from maze2 import MazeObserver
 
-MAX_STEP = 50000000  # Number max of steps.
+MAX_STEP = 2000  # Number max of steps.
 ZOMBIE_RATE = 2  # Zombies move one step on ZOMBIE_RATE.
 
 
@@ -14,6 +14,7 @@ class VirtualWindow(MazeObserver):
         self.games = 1
         self.count_update = 0
         self.zombies = zombies
+        self.win = 0
 
     def zombies_reset(self):
         """Reset the zombies."""
@@ -30,7 +31,6 @@ class VirtualWindow(MazeObserver):
                 reset_zombies = True
                 self.agent.reset()
                 self.games += 1
-                print("Zombies Suicide score:")
                 Maze().reset()
             # Zombies
             if self.count_update == ZOMBIE_RATE:
@@ -41,12 +41,6 @@ class VirtualWindow(MazeObserver):
                         reset_zombies = True
                         self.agent.reset()
                         self.games += 1
-                        print("Zombies Suicide score:", self.agent.score,
-                              " nb iter:", self.agent.iteration,
-                              " game n°:", self.games,
-                              "noise:", self.agent.noise,
-                              "position:", self.agent.position,
-                              "zombie", zombie.position)
                         Maze().reset()
 
                 if reset_zombies:
@@ -57,12 +51,10 @@ class VirtualWindow(MazeObserver):
             self.update_player()
             self.update_enmies()
         else:
-            print("score:", self.agent.score, " nb iter:",
-                  self.agent.iteration,
-                  " game n°:", self.games, "noise:", self.agent.noise)
             self.agent.reset()
             self.zombies_reset()
             self.games += 1
+            self.win += 1
             Maze().reset()
 
     def run(self):
@@ -70,15 +62,9 @@ class VirtualWindow(MazeObserver):
         for _ in range(MAX_STEP):
             self.on_update(1.0)
 
-        print("Position:", self.agent.position, "Start:", Maze().start,
-              "nb iterations ->", self.agent.iteration)
-
     def update_wall(self):
         """Process on an update of the walls."""
         if not self.agent.do_wall():  # is agent in the wall closed.
-            print("Wall suicide score:", self.agent.score, " nb iter:",
-                  self.agent.iteration,
-                  " game n°:", self.games, "noise:", self.agent.noise)
             self.agent.reset()
             self.zombies_reset()
             self.games += 1

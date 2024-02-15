@@ -45,7 +45,7 @@ MAZE = [
     "           |@@@@@|          |",
     "           |          |@@@|@@",
     "           |          |   |  ",
-    "           |   -------|   | $",
+    "           |   -------|   |  ",
     "@@@@@@@@|@@@####      |  @@@@",
     "        |             |      ",
     "*   $   |      .      |      ",
@@ -304,8 +304,6 @@ class Maze(Subject, metaclass=Singleton):
                 elif char == MAP_ZOMBIE:
                     self.zombies.append(pos)
                     self._map[pos] = VoidMaze()
-                else:
-                    print("ERREUR")
                 col += 1
             self.cols = len(line)
             row += 1
@@ -317,7 +315,6 @@ class Maze(Subject, metaclass=Singleton):
         self._map[position].desactivate()
         self.number_of_dollars -= 1
         if self.number_of_dollars == 0:
-            print("Ouverture Porte _________________________________")
             self.goal = self.final_goal
 
     def is_enable(self, position) -> bool:

@@ -18,23 +18,13 @@ if __name__ == '__main__':
         zombies.append(AgentZombie(env, zombie))
     for party_count in range(MAX_STEP):
         agent.load(AGENT_FILE)
-        # for key, value in agent.qtable.qtable.items():
-        #     print("key->", key)
-        #     print("value:", value)
         window = MazeWindow(agent, zombies)
         Maze().register(window)
-        print("-------------------setup dollar----------------------------")
         window.setup_dollar()
-        print("-------------------setup enmies----------------------------")
         window.setup_enmies()
-        print("-------------------setup wallss----------------------------")
         window.setup_walls()
-        print("-------------------setup ----------------------------")
         window.setup()
-        print("-------------------run ----------------------------")
-
         window.run()
-
         agent.save(AGENT_FILE)
         Maze().reset()
         agent.reset()

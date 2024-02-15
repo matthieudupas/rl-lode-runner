@@ -21,6 +21,7 @@ ALEA_FACTOR = 0.95
 START_NOISE = 0.40
 LEARNING_RATE = 0.9
 DISCOUNT_FACTOR = 0.6
+DIGG_FACTOR = 100
 
 AGENT_FILE = 'agent.qtable'
 
@@ -81,7 +82,7 @@ class AgentZombie():
             if not Maze().get(self.position).is_access():
                 # The wall is close on the agent
                 self.reset()
-                print("Je reset le zombie--------------")
+                # print("Je reset le zombie--------------")
                 result = False
         return result
 
@@ -114,18 +115,19 @@ class Qtable():
                     (reward + self.discount_factor * maxQ - self.qtable[state][action])
             self.qtable[state][action] += delta
         except KeyError:
-            print('---------------------------------------------------')
-            print(state)
-            print(new_state)
-            print(action)
-            print('---------------------------------------------------')
+            pass
+            # print('---------------------------------------------------')
+            # print(state)
+            # print(new_state)
+            # print(action)
+            # print('---------------------------------------------------')
 
     def get_max(self, state):
         """Get the max."""
         try:
             return arg_max(self.qtable[state])
         except KeyError:
-            print('-------get max error-------------------------------------------')
+            # print('-------get max error-------------------------------------------')
             return ACTION_LEFT
 
 
@@ -137,11 +139,11 @@ class Agent:
                  discount_factor=DISCOUNT_FACTOR):
         """Initialize."""
         self.env = env
+        self.noise = START_NOISE
         self.reset()
         self.qtable = Qtable(ACTIONS, learning_rate, discount_factor)
         self.qtable.add_state(self.state)
         self.history = []
-        self.noise = START_NOISE
         self.previous_state = self.state
         self.previous_new_state = self.state
 
@@ -156,6 +158,7 @@ class Agent:
                                    self.position[0], self.position[1])
         self.state = tuple(a_state)
         self.my_min = 15
+        AbstractAction().update_proba(self.noise / DIGG_FACTOR)
 
     def zombie_radar(self, zombies, state_in, position):
         """Build de radar of the zombies."""
@@ -191,12 +194,15 @@ class Agent:
         self.qtable.update(self.state, new_state, reward, action)
         self.state = new_state
         if position[0] < self.my_min or position[0] < 8:
-            # print(position, "goal:", Maze().goal, "score:", self.score)
             self.my_min = position[0]
         if self.position == Maze().goal:
             # Each time the goal is reached alea decrease.
             self.history.append(self.score)
             self.noise *= ALEA_FACTOR
+            if self.noise < 0.001:
+                self.noise = 0.0
+            AbstractAction().update_proba(self.noise / DIGG_FACTOR)
+
         else:
             # A normal step store the last move
             if action in ACTIONS_MOVES:
@@ -208,17 +214,14 @@ class Agent:
 
     def do_wall(self):
         """Treat the close of the wall."""
-        # print(Maze().get(self.position).my_char)
         result = True
         if Maze().get(self.position).my_char == MAP_WALL_DIGGABLE:
-            # print(Maze().get(self.position).is_access())
             if not Maze().get(self.position).is_access():
                 # The wall is closed on the agent.
                 self.qtable.update(self.previous_state,
                                    self.previous_new_state,
                                    REWARD_SUICIDE,
                                    self.previous_action)
-                # print("Je reset --------------")
                 result = False
         return result
 

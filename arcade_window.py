@@ -79,8 +79,8 @@ class MazeWindow(Window, VirtualWindow):
 
     def on_update(self, delta_time):
         """Give the control to the mother class."""
-        VirtualWindow.on_update(self, delta_time)
         self.setup_dollar()
+        VirtualWindow.on_update(self, delta_time)
 
     def setup_enmies(self):
         """Set up the enemies i.e. the zombies."""
@@ -105,7 +105,6 @@ class MazeWindow(Window, VirtualWindow):
 
     def setup(self):
         """Set up."""
-        print('SETUP')
         self.walls_non_diggable = SpriteList()
         for position, block in Maze().get_all_positions().items():
             if block.my_char == MAP_WALL:
@@ -174,27 +173,5 @@ class MazeWindow(Window, VirtualWindow):
         self.enemies.draw()
 
         arcade.draw_text(
-            f'#{self.agent.iteration} Score : {self.agent.score} Parties : {self.games} Noise : {self.agent.noise}',
+            f'#{self.agent.iteration} Parties : {self.games} Win : {self.win} Score : {self.agent.score} Noise : {self.agent.noise}',
             10, 10, arcade.color.WHITE, 16)
-    # def on_key_press(self, key, modifiers):
-    #     # print("key:",key)
-    #     if key == arcade.key.R:
-    #         self.agent.reset()
-    #         self.update_player()
-    #         self.update_enemies()
-    #         self.stop = False
-    #     elif key == arcade.key.S:
-    #         self.stop = True
-    #         print(len(Maze().zombies))
-    #     elif key == arcade.key.MOTION_RIGHT:
-    #         self.wait += 0.01
-    #     elif key == arcade.key.MOTION_LEFT:
-    #         self.wait -= 0.01
-    #     elif key == arcade.key.KEY_0:
-    #         self.wait = 1.0
-    #     elif key == arcade.key.KEY_1:
-    #         self.wait = 0.01
-    #     elif key == arcade.key.Q:
-    #         self.wait = 0.01
-    #     else:
-    #         pass

@@ -89,7 +89,7 @@ class Environment:
                     if position == dollar:
                         if Maze().get(position).activated:
                             reward = REWARD_DOLLAR
-                            print('---------------:', position)
+                            # print('---------------:', position)
                             Maze().bring_dollar(position)
                 reward = REWARD_DEFAULT
         else:
