@@ -62,7 +62,7 @@ class MazeWindow(Window, VirtualWindow):
                         Maze().cols * SPRITE_SIZE,
                         Maze().rows * SPRITE_SIZE,
                         "ESGI Lode Runner")
-        self.enmies = SpriteList()
+        self.enemies = SpriteList()
         self.dollars = SpriteList()
         self.walls_non_diggable = SpriteList()
         self.walls = SpriteList()
@@ -84,12 +84,12 @@ class MazeWindow(Window, VirtualWindow):
 
     def setup_enmies(self):
         """Set up the enemies i.e. the zombies."""
-        self.enmies = SpriteList()
+        self.enemies = SpriteList()
         for zombie in self.zombies:
             zombie_sprite = Sprite(IMAGE_ZOMBIE, SPRITE_SCALING)
             zombie_sprite.center_x, \
                 zombie_sprite.center_y = state_to_xy(zombie.position)
-            self.enmies.append(zombie_sprite)
+            self.enemies.append(zombie_sprite)
         self.update_enmies()
 
     def update_player(self):
@@ -99,7 +99,7 @@ class MazeWindow(Window, VirtualWindow):
 
     def update_enmies(self):
         """Update the position of the enemies."""
-        for count, zombie in enumerate(self.enmies):
+        for count, zombie in enumerate(self.enemies):
             zombie.center_x, \
                 zombie.center_y = state_to_xy(self.zombies[count].position)
 
@@ -128,7 +128,6 @@ class MazeWindow(Window, VirtualWindow):
                 wall_hallow_sprite.center_x, \
                     wall_hallow_sprite.center_y = state_to_xy(position)
                 self.walls_non_diggable.append(wall_hallow_sprite)
-            print(Maze().goal)
 
         self.start = Sprite(IMAGE_START, SPRITE_SCALING)
         self.start.center_x, \
@@ -172,7 +171,7 @@ class MazeWindow(Window, VirtualWindow):
         self.walls_non_diggable.draw()
         self.player.draw()
         self.dollars.draw()
-        self.enmies.draw()
+        self.enemies.draw()
 
         arcade.draw_text(
             f'#{self.agent.iteration} Score : {self.agent.score} Parties : {self.games} Noise : {self.agent.noise}',

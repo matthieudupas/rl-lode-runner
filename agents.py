@@ -126,7 +126,7 @@ class Qtable():
             return arg_max(self.qtable[state])
         except KeyError:
             print('-------get max error-------------------------------------------')
-            return 0
+            return ACTION_LEFT
 
 
 class Agent:

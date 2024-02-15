@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jan 16 13:30:15 2024
+from random import choice
 
-@author: Matthieu Dupas
-"""
 from gof import Singleton
 from maze2 import Maze
-from random import choice
 
 X = 0  # X is up to down.
 Y = 1  # Y is left to right.
@@ -21,9 +16,7 @@ ACTION_DIGG_RIGHT = 'K'
 ACTIONS_MOVES = [ACTION_UP, ACTION_DOWN, ACTION_LEFT,
                  ACTION_RIGHT, ACTION_IDLE]
 ACTIONS_DIGG = [ACTION_DIGG_LEFT, ACTION_DIGG_RIGHT]
-ACTIONS = ACTIONS_MOVES #+ ACTIONS_DIGG
-#ACTIONS = [ACTION_LEFT, ACTION_RIGHT, ACTION_UP, ACTION_DOWN]
-
+ACTIONS = ACTIONS_MOVES + ACTIONS_DIGG
 
 MOVES = {ACTION_UP: (-1, 0),
          ACTION_DOWN: (1, 0),
@@ -33,7 +26,7 @@ MOVES = {ACTION_UP: (-1, 0),
          ACTION_DIGG_LEFT: (0, 0),
          ACTION_DIGG_RIGHT: (0, 0)}
 
-DIGG_THRESHOLD = 0.00  # Proba under which we digg.
+DIGG_THRESHOLD = 0.005  # Proba under which we digg.
 
 
 class AbstractAction(metaclass=Singleton):
@@ -49,8 +42,8 @@ class AbstractAction(metaclass=Singleton):
     def gravity(self, position):
         """Act the gravity."""
         previous_position = position
-        while(Maze().is_enable(position) and not
-              Maze().get(position).is_solid()):
+        while (Maze().is_enable(position) and not
+        Maze().get(position).is_solid()):
             previous_position = position
             position = (position[X] + 1, position[Y])
         if Maze().is_enable(position) and Maze().get(position).hang:
@@ -263,9 +256,9 @@ class DiggRightAction(AbstractAction):
         try:
             right_position, possible = RightAction().execute(position)
             if possible:  # It's possible to go on the right.
-                position_digg = (right_position[X]+1, right_position[Y])
-                if Maze().is_exist(position_digg) and\
-                   Maze().get(position_digg).is_diggable():
+                position_digg = (right_position[X] + 1, right_position[Y])
+                if Maze().is_exist(position_digg) and \
+                        Maze().get(position_digg).is_diggable():
                     Maze().digg(position_digg)
                     result_ok = True
             return position, result_ok
@@ -304,8 +297,8 @@ class DiggLeftAction(AbstractAction):
             left_position, possible = LeftAction().execute(position)
             if possible:  # It's possible to go on the right.
                 position_digg = (left_position[X] + 1, left_position[Y])
-                if Maze().is_exist(position_digg) and\
-                   Maze().get(position_digg).is_diggable():
+                if Maze().is_exist(position_digg) and \
+                        Maze().get(position_digg).is_diggable():
                     Maze().digg(position_digg)
                     result_ok = True
             return position, result_ok
@@ -320,7 +313,6 @@ ACTIONS_CLASS = {ACTION_UP: UpAction(),
                  ACTION_IDLE: IdleAction(),
                  ACTION_DIGG_LEFT: DiggLeftAction(),
                  ACTION_DIGG_RIGHT: DiggRightAction()}
-
 
 if __name__ == "__main__":
     import doctest

@@ -9,11 +9,11 @@ RANGE_NEIGHBORS = range(1, NEIGHBORS)
 
 RANGE_SIGN = [-1, 1]
 
-REWARD_WALL = -128
+REWARD_WALL = -10
 REWARD_DEFAULT = -1
-REWARD_GOAL = 64
-REWARD_DOLLAR = 30
-REWARD_SUICIDE = -500
+REWARD_GOAL = 1000
+REWARD_DOLLAR = 100
+REWARD_SUICIDE = -1000
 
 
 def sign(value):
@@ -71,9 +71,6 @@ class Environment:
                 radar_dollars.append(build_radar(dollar, row, col))
             else:
                 radar_dollars.append([0] * 9)
-        # print("----------------- Get Radar ---------------")
-        # print(radar + radar_goal + radar_dollars[0])
-        # print("-------------------------------------------")
         result = radar + radar_goal
         for dollar in radar_dollars:
             result = result + dollar
