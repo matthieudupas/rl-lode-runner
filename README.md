@@ -1,0 +1,1 @@
+Ce projet a pour objectif de résoudre le jeu Lode Runner à l'aide de techniques d'apprentissage par renforcement (Reinforcement Learning - RL). L'agent apprend à naviguer dans les niveaux du jeu en collectant des récompenses, en évitant les ennemis, et en atteignant l'objectif final.
